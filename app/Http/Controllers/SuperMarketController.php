@@ -23,12 +23,31 @@ class SuperMarketController extends Controller
     }
 
     /**
+     * Display a listing of the supermarkets.
+     */
+    public function markets(Request $request)
+    {
+        // Récupérer la position de l'utilisateur
+
+        $latitude = -11.6642316;
+        $longitude = 27.4826264;
+
+         // Définir le rayon de recherche en kilomètres
+         $rayon = 10;
+
+        $supermarkets = Supermarket::geofence($latitude, $longitude, 0, $rayon)->get();
+        return view('frontend.pages.supermarkets', [
+            'supermarkets' => $supermarkets,
+        ]);
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
         $fournisseurs = User::where('role', 1)->get();
-        
+
         return view('backend.supermarket.form', [
             'fournisseurs' => $fournisseurs,
             'supermarket' => new Supermarket()
@@ -78,7 +97,7 @@ class SuperMarketController extends Controller
     public function edit(Supermarket $supermarket)
     {
         $fournisseurs = User::where('role', 1)->get();
-        
+
         return view('backend.supermarket.form', [
             'fournisseurs' => $fournisseurs,
             'supermarket' => $supermarket
@@ -118,7 +137,7 @@ class SuperMarketController extends Controller
      */
     public function destroy(Supermarket $supermarket)
     {
-       
+
         $status = $supermarket->delete();
 
         if($status) {

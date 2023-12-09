@@ -4,11 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Malhal\Geographical\Geographical;
 
 class Supermarket extends Model
 {
-    protected $guarded = [];
+   
     use HasFactory;
+    use Geographical;
+
+    protected $guarded = [];
+    protected $table = 'supermarkets';
+    protected static  $kilometers = true;
+
 
     public function fournisseur()
     {

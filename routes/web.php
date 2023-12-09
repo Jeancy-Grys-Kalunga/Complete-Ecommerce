@@ -10,9 +10,11 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SupplieController;
+use App\Http\Controllers\SuperMarketController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProductReviewController;
+use App\Http\Controllers\NewsletterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,14 +37,20 @@ Route::get('cache-clear', function () {
 // STORAGE LINKED ROUTE
 Route::get('storage-link', [AdminController::class, 'storageLink'])->name('storage.link');
 
+// AUTHENTIFICATION
+
+// Register
 Auth::routes(['register' => false]);
-
-Route::get('user/login', [LoginController::class, 'login'])->name('login.form');
-Route::post('user/login', [LoginController::class, 'loginSubmit'])->name('login.submit');
-Route::get('user/logout', [LoginController::class, 'logout'])->name('user.logout');
-
 Route::get('user/register', [LoginController::class, 'register'])->name('register.form');
 Route::post('user/register', [LoginController::class, 'registerSubmit'])->name('register.submit');
+
+//  login 
+Route::get('user/login', [LoginController::class, 'login'])->name('login.form');
+Route::post('user/login', [LoginController::class, 'loginSubmit'])->name('login.submit');
+
+// logout
+Route::get('user/logout', [LoginController::class, 'logout'])->name('user.logout');
+
 // Reset password
 Route::GET('password-reset', [LoginController::class, 'showResetForm'])->name('password.reset');
 // Socialite
@@ -72,6 +80,8 @@ Route::get('/cart', function () {
     return view('frontend.pages.cart');
 })->name('cart');
 Route::get('/checkout', [CartController::class, 'checkout'])->name('checkout')->middleware('user');
+
+Route::get('/markets', [SuperMarketController::class, 'markets'])->name('markets');
 // Wishlist
 Route::get('/wishlist', function () {
     return view('frontend.pages.wishlist');
@@ -97,7 +107,7 @@ Route::get('blog-cat/{slug}', [FrontendController::class, 'blogByCategory'])->na
 Route::get('blog-tag/{slug}', [FrontendController::class, 'blogByTag'])->name('blog.tag');
 
 // NewsLetter
-Route::post('/subscribe', [UsersController::class, 'subscribe'])->name('subscribe');
+Route::post('/subscribe', [NewletterController::class, 'subscribe'])->name('subscribe');
 
 // Product Review
 Route::resource('/review', 'ProductReviewController');

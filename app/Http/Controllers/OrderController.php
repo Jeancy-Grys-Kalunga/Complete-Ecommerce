@@ -17,7 +17,6 @@ use App\Http\Cinetpay\CinetPay;
 use App\Http\Cinetpay\Commande;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\StatusNotification;
-use App\Notifications\NewOrderNotification;
 
 class OrderController extends Controller
 {
@@ -160,6 +159,7 @@ class OrderController extends Controller
                         "customer_state" => "", //L’état dans de la quel se trouve le client. Cette valeur est obligatoire si le client se trouve au États Unis d’Amérique (US) ou au Canada (CA)
                         "customer_zip_code" => "", //Le code postal du client
                     );
+
                     // enregistrer la transaction dans votre base de donnée
                     /*  $commande->create(); */
 
@@ -184,7 +184,7 @@ class OrderController extends Controller
                                 $user_id = $supplie_data->user_id;
                            }
                     $user=User::where('id', $user_id)->get();
-                   
+
                     $details = [
                         'title' => "Vous avez une nouvelle commande de " .  $data->quantity. "  " . $data->product['title'] . " de ". number_format($data->price,2) ." FC",
                         'actionURL' => route('order.show', $order->id),
@@ -195,7 +195,7 @@ class OrderController extends Controller
 
                }else{
                      session()->forget('cart');
-                    session()->forget('coupon');
+                     session()->forget('coupon');
                    }
 
                 Cart::where('user_id', auth()->user()->id)->where('order_id', null)->update(['order_id' => $order->id]);
@@ -226,14 +226,13 @@ class OrderController extends Controller
                     $user_id = $supplie_data->user_id;
                     }
                     $user=User::where('id', $user_id)->get();
-                   
                     $details = [
                         'title' => "Vous avez une nouvelle commande de " .  $data->quantity. "  " . $data->product['title'] . " de ". number_format($data->price,2) ." FC",
                         'actionURL' => route('order.show', $order->id),
                         'fas' => 'fa-file-alt'
                     ];
                     Notification::send($user, new StatusNotification($details));
-                  }
+                }
 
             }else{
                 session()->forget('cart');
@@ -245,6 +244,7 @@ class OrderController extends Controller
             return redirect()->route('home');
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -301,7 +301,7 @@ class OrderController extends Controller
         }
         $status = $order->fill($data)->save();
         if ($status) {
-            request()->session()->flash('success', 'Commande mis à jour avec succès');
+            request()->session()->flash('success', 'Commande mise à jour avec succès');
         } else {
             request()->session()->flash('error', 'Quelque chose ce mal passé veuillez réessayer plus tard !!');
         }

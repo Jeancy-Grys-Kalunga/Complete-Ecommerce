@@ -78,7 +78,7 @@ class Helper
                 <a href="javascript:void(0);">Supermarchés<i class="ti-angle-down"></i></a>
                 <ul class="dropdown border-0 shadow">
 
-                <li><a href=""><i class="ti-location-pin"></i>Le plus proche de vous </a></li>
+                <li><a href="<?php echo route('markets'); ?>"><i class="ti-location-pin"></i>Le plus proche de vous </a></li>
                     <tr>
                     <?php
                     foreach ($menu as $shop_info) {

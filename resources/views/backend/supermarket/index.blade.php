@@ -43,15 +43,15 @@
                     <td>{{$supermarket->description}}
                     </td>
                     <td>{{ $supermarket->address }}</td>
-                    <td>   @if($supermarket->thumbnail)
-                        @php
-                          $photo=explode(',',$supermarket->photo);
-                          // dd($photo);
-                        @endphp
-                        <img src="{{$supermarket[0]}}" class="img-fluid zoom" style="max-width:80px" alt="{{$supermarket->thumbnail}}">
-                    @else
-                        <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid" style="max-width:80px" alt="avatar.png">
-                    @endif </td>
+                      <td>   @if($supermarket->thumbnail)
+                          @php
+                            $photo=explode(',',$supermarket->photo);
+                            // dd($photo);
+                          @endphp
+                          <img src="{{$supermarket[0]}}" class="img-fluid zoom" style="max-width:80px" alt="{{$supermarket->thumbnail}}">
+                      @else
+                          <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid" style="max-width:80px" alt="avatar.png">
+                      @endif </td>
                     <td>  {{$supermarket->fournisseur->name}}</td>
 
                     <td>
