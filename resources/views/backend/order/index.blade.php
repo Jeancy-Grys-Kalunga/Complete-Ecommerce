@@ -1,5 +1,7 @@
 @extends('backend.layouts.master')
 
+@section('title','Liste de commande')
+
 @section('main-content')
  <!-- DataTales Example -->
  <div class="card shadow mb-4">
@@ -42,11 +44,11 @@
               </tr>
           </tfoot>
           <tbody>
-            @foreach($orders as $order)  
+            @foreach($orders as $order)
             @php
                 $shipping_charge=DB::table('shippings')->where('id',$order->shipping_id)->pluck('price');
-            @endphp 
-            
+            @endphp
+
                 <tr>
                     <td>{{$order->id}}</td>
                     <td>{{$order->order_number}}</td>

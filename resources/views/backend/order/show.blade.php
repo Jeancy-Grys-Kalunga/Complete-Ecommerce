@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Order Detail')
+@section('title','Détail de la commande')
 
 @section('main-content')
 <div class="card">
@@ -84,7 +84,7 @@
                             <span class="badge badge-danger">Annuléé</span>
                           @endif</td>
                     </tr>
-                   
+
                     <tr>
                       <td>Coupon</td>
                       <td> : {{number_format($order->coupon,2)}} FC</td>
@@ -124,6 +124,11 @@
                     <tr>
                         <td>N° Tél.</td>
                         <td> : {{$order->phone}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Adresse de livraison</td>
+                        <td> : {{$order->address1}}</td>
                     </tr>
               </table>
             </div>

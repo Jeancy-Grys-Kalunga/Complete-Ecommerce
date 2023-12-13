@@ -6,6 +6,7 @@ use DB;
 use App\Models\User;
 use App\Models\Supermarket;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 
 class SupplieController extends Controller
@@ -29,8 +30,13 @@ class SupplieController extends Controller
     //  return $data;
 
         $supplies = Supermarket::getProductBySupplie();
-        
-        return view('fournisseur.index')->with('users', json_encode($array));
+        if (Auth::user()->role == 'admin') {
+           
+            return view('backend.supplies.index')->with('supplies', $supplies);
+        } elseif (Auth::user()->role == 'fournisseur') {
+          
+            return view('fournisseur.index')->with('users', json_encode($array));
+        }
     }
 
     /**

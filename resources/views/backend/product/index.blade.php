@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+@section('title','Liste produits')
 
 @section('main-content')
  <!-- DataTales Example -->
@@ -35,7 +36,7 @@
           </thead>
           <tfoot>
             <tr>
-              <th>S.N.</th>
+              <th>N°</th>
               <th>Titre</th>
               <th>Catégorie</th>
               <th>Affiché</th>

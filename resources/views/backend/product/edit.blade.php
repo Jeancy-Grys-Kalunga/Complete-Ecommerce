@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+@section('title','Edition Produit')
 
 @section('main-content')
 

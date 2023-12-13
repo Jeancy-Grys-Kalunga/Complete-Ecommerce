@@ -15,7 +15,7 @@
     <li class="nav-item active">
       <a class="nav-link" href="{{route('admin')}}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
+        <span>Tableau de bord</span></a>
     </li>
 
     <!-- Divider -->
@@ -142,7 +142,6 @@
             <span>Avis des clients</span></a>
     </li>
 
-
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -203,8 +202,6 @@
             <span>Commentaires</span>
         </a>
       </li>
-
-
 
 
     <!-- Divider -->

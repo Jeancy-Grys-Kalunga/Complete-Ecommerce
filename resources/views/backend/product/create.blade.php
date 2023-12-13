@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+@section('title','Ajout Produit')
 
 @section('main-content')
 
