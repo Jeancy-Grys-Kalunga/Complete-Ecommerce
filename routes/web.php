@@ -10,11 +10,14 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SupplieController;
-use App\Http\Controllers\SuperMarketController;
 use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\NewsletterControler;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\SuperMarketController;
 use App\Http\Controllers\ProductReviewController;
-use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\SuperMarketCategoryController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +47,7 @@ Auth::routes(['register' => false]);
 Route::get('user/register', [LoginController::class, 'register'])->name('register.form');
 Route::post('user/register', [LoginController::class, 'registerSubmit'])->name('register.submit');
 
-//  login 
+//  login
 Route::get('user/login', [LoginController::class, 'login'])->name('login.form');
 Route::post('user/login', [LoginController::class, 'loginSubmit'])->name('login.submit');
 
@@ -54,6 +57,7 @@ Route::get('user/logout', [LoginController::class, 'logout'])->name('user.logout
 // Reset password
 Route::GET('password-reset', [LoginController::class, 'showResetForm'])->name('password.reset');
 // Socialite
+
 Route::get('login/{provider}/', [LoginController::class, 'redirect'])->name('login.redirect');
 Route::get('login/{provider}/callback/', [LoginController::class, 'Callback'])->name('login.callback');
 
@@ -68,6 +72,9 @@ Route::get('product-detail/{slug}', [FrontendController::class, 'productDetail']
 Route::post('/product/search', [FrontendController::class, 'productSearch'])->name('product.search');
 Route::get('/product-cat/{slug}', [FrontendController::class, 'productCat'])->name('product-cat');
 Route::get('/product-shop/{slug}', [FrontendController::class, 'productShop'])->name('product-shop');
+
+Route::get('/shop/{slug}', [FrontendController::class, 'productCategory'])->name('shop');
+
 Route::get('/product-sub-cat/{slug}/{sub_slug}', [FrontendController::class, 'productSubCat'])->name('product-sub-cat');
 Route::get('/product-brand/{slug}', [FrontendController::class, 'productBrand'])->name('product-brand');
 // Cart section
@@ -75,6 +82,7 @@ Route::get('/add-to-cart/{slug}', [CartController::class, 'addToCart'])->name('a
 Route::post('/add-to-cart', [CartController::class, 'singleAddToCart'])->name('single-add-to-cart')->middleware('user');
 Route::get('cart-delete/{id}', [CartController::class, 'cartDelete'])->name('cart-delete');
 Route::post('cart-update', [CartController::class, 'cartUpdate'])->name('cart.update');
+
 
 Route::get('/cart', function () {
     return view('frontend.pages.cart');
@@ -107,7 +115,7 @@ Route::get('blog-cat/{slug}', [FrontendController::class, 'blogByCategory'])->na
 Route::get('blog-tag/{slug}', [FrontendController::class, 'blogByTag'])->name('blog.tag');
 
 // NewsLetter
-Route::post('/subscribe', [NewletterController::class, 'subscribe'])->name('subscribe');
+Route::post('/subscribe', [NewsletterControler::class, 'subscribe'])->name('subscribe');
 
 // Product Review
 Route::resource('/review', 'ProductReviewController');
@@ -170,8 +178,8 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'user-role:admin']]
     // Order
     Route::get('/order', 'OrderController@index')->name('order.index.admin');
     Route::get('/order/show/{id}', "OrderController@show")->name('order.show.admin');
-    Route::resource('/supermarket', 'SuperMarketController');
-
+    Route::resource('/supermarket', SuperMarketController::class);
+    Route::resource('/superMarketCategory', SuperMarketCategoryController::class);
 });
 
 // Fournisseur section start
@@ -238,7 +246,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
     Route::resource('/category', 'CategoryController');
     // Product
     Route::resource('/product', 'ProductController');
-   
+
     // Coupon
     Route::resource('/coupon', 'CouponController');
 

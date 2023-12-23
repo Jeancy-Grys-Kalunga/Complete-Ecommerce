@@ -7,6 +7,10 @@ use App\Models\User;
 use App\Models\Supermarket;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Http\Requests\StoreFournisseurRequest;
 
 
 class SupplieController extends Controller
@@ -31,10 +35,10 @@ class SupplieController extends Controller
 
         $supplies = Supermarket::getProductBySupplie();
         if (Auth::user()->role == 'admin') {
-           
+
             return view('backend.supplies.index')->with('supplies', $supplies);
         } elseif (Auth::user()->role == 'fournisseur') {
-          
+
             return view('fournisseur.index')->with('users', json_encode($array));
         }
     }
@@ -45,7 +49,7 @@ class SupplieController extends Controller
     public function create()
     {
         $supermarkets = Supermarket::where('status', 'active')->get();
-        
+
         return view('backend.supplies.form', [
             'supermarkets' => $supermarkets,
             'supplie' => new User()
@@ -57,7 +61,32 @@ class SupplieController extends Controller
      */
     public function store(StoreFournisseurRequest $request)
     {
-        //
+        $supplie = User::create([
+            'name' => $request->name,
+            'email' =>  $request->email,
+            'photo' => $request->photo,
+            'password' => Hash::make('1111'),
+            'role' => '1'
+        ]);
+
+
+        // $supermarket=Supermarket::findOrFail($request->supermarket_id);
+        // $supermarket->update([
+        //     'user_id' => $supplie->id
+        // ]);
+
+        if($supplie){
+  
+            request()->session();
+            Alert::toast('Vous avez ajouté un nouveau fournisseur avec succès !!', 'success');
+            return redirect()->route('supplie.index');
+        }
+        else{
+            request()->session();
+            Alert::toast('Vous avez ajouté un nouveau fournisseur avec succès !!', 'error');
+            return redirect()->route('supplie.index');
+        }
+
     }
 
     /**

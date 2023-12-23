@@ -246,7 +246,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
         // SweetAlert
-        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
 
         // Cinetpay
 

@@ -1,7 +1,5 @@
 @extends('backend.layouts.master')
-@section('title','Listes des Supermarchés')
-
-
+@section('title','Listes de Catégorie Supermarché')
 
 @section('main-content')
 <!-- DataTales Example -->
@@ -12,72 +10,62 @@
         </div>
     </div>
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary float-left">Liste des fournisseurs</h6>
-        <a href="{{route('supplie.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Ajouter un fournisseur</a>
+        <h6 class="m-0 font-weight-bold text-primary float-left">Liste catégories des Supermarchés</h6>
+        <a href="{{route('superMarketCategory.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Ajouter nouvelle catégorie</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            @if(count($supplies)>0)
+            @if(count($superMarketCategories)>0)
             <table class="table table-bordered" id="product-dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>N°</th>
-                        <th>Nom du fournisseur</th>
-                        <th>Adresse mail</th>
+                        <th>Nom de la catégorie</th>
                         <th>Photo</th>
-                        <th>Supermarché</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @foreach($supplies as $supplie)
+                    @foreach($superMarketCategories as $superMarketCategory)
                     
                     <tr>
-                        <td>{{$supplie->fournisseur->id}}</td>
-                        <td>{{$supplie->fournisseur->name}}</td>
-                        <td>{{$supplie->fournisseur->email}}
-                        </td>
-                        <td> @if($supplie->fournisseur->photo)
+                        <td>{{$superMarketCategory->id}}</td>
+                        <td>{{$superMarketCategory->title}}</td>
+                        <td> @if($superMarketCategory->photo)
                             @php
-                            $photo=explode(',',$supplie->fournisseur->photo);
+                            $photo=explode(',',$superMarketCategory->photo);
                             // dd($photo);
                             @endphp
-                            <img src="{{$supplie[0]}}" class="img-fluid zoom" style="max-width:80px" alt="{{$supplie->fournisseur->photo}}">
+                            <img src="{{$superMarketCategory[0]}}" class="img-fluid zoom" style="max-width:80px" alt="{{$superMarketCategory->photo}}">
                             @else
                             <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid" style="max-width:80px" alt="avatar.png">
-                            @endif </td>
-
+                            @endif 
+                        </td>
                         <td>
-                            @if($supplie->title)
-                            {{$supplie->title}}
+                            @if($superMarketCategory->status=='active')
+                            <span class="badge badge-success">{{$superMarketCategory->status}}</span>
                             @else
-                            Non attribué
-                            @endif
-                        <td>
-                            @if($supplie->fournisseur->status=='active')
-                            <span class="badge badge-success">{{$supplie->fournisseur->status}}</span>
-                            @else
-                            <span class="badge badge-warning">{{$supplie->fournisseur->status}}</span>
+                            <span class="badge badge-warning">{{$superMarketCategory->status}}</span>
                             @endif
                         </td>
 
                         <td>
-                            <a href="{{route('supplie.edit',$supplie->fournisseur->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                            <form method="POST" action="{{route('supplie.destroy',[$supplie->fournisseur->id])}}">
+                            <a href="{{route('superMarketCategory.edit',$superMarketCategory->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                            <form method="POST" action="{{route('superMarketCategory.destroy',[$superMarketCategory->id])}}">
                                 @csrf
                                 @method('delete')
-                                <button class="btn btn-danger btn-sm dltBtn" data-id={{$supplie->fournisseur->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                <button class="btn btn-danger btn-sm dltBtn" data-id={{$superMarketCategory->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
                             </form>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-            <span style="float:right">{{$supplies->links()}}</span>
+            <span style="float:right">{{$superMarketCategories->links()}}</span>
             @else
-            <h6 class="text-center">Aucun fournisseur trouvé !!! Veuillez en créer un nouveau</h6>
+            <h6 class="text-center">Aucune catégorie trouvée pour cet type de supermarché !!! Veuillez en créer une nouvelle</h6>
             @endif
         </div>
     </div>
@@ -142,7 +130,7 @@
             e.preventDefault();
             swal({
                     title: "Etès-vous sûr ?"
-                    , text: "Voulez-vous vraiment supprimer ce fournisseur !"
+                    , text: "Voulez-vous vraiment supprimer cette catégorie de supermarché !"
                     , icon: "warning"
                     , buttons: true
                     , dangerMode: true
@@ -151,7 +139,7 @@
                     if (willDelete) {
                         form.submit();
                     } else {
-                        swal("Fournisseur supprimé avec succès !");
+                        swal("Catégorie de supermarché supprimé avec succès !");
                     }
                 });
         })

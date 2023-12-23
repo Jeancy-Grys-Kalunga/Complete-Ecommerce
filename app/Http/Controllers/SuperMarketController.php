@@ -97,7 +97,7 @@ class SuperMarketController extends Controller
     public function edit(Supermarket $supermarket)
     {
         $fournisseurs = User::where('role', 1)->get();
-
+ 
         return view('backend.supermarket.form', [
             'fournisseurs' => $fournisseurs,
             'supermarket' => $supermarket
@@ -145,6 +145,6 @@ class SuperMarketController extends Controller
         } else {
             request()->session()->flash('error', 'Erreur survenue lors de la suppression');
         }
-        return redirect()->route('product.index');
+        return redirect()->route('supermarket.index');
     }
 }

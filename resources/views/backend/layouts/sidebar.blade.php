@@ -51,7 +51,7 @@
     <hr class="sidebar-divider">
         <!-- Heading -->
         <div class="sidebar-heading">
-            Vente 
+            Vente
         </div>
 
     <!-- Categories -->
@@ -129,6 +129,7 @@
         <div id="MarketCollapse" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Options:</h6>
+            <a class="collapse-item" href="{{route('superMarketCategory.index')}}"> Catégorie Supermarché</a>
             <a class="collapse-item" href="{{route('supermarket.index')}}">Supermarchés</a>
             <a class="collapse-item" href="{{route('supplie.index')}}">Fournisseurs</a>
           </div>

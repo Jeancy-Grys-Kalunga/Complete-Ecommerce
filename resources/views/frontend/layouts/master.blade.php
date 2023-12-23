@@ -21,11 +21,13 @@
 
 	<!-- Header -->
 	@include('frontend.layouts.header')
-	<!--/ End Header -->
     @include('sweetalert::alert')
+	<!--/ End Header -->
 	@yield('main-content')
 
 	@include('frontend.layouts.footer')
+
+
 
 </body>
 </html>

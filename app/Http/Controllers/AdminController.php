@@ -46,6 +46,7 @@ class AdminController extends Controller
 
     public function profileUpdate(Request $request,$id){
         // return $request->all();
+        
         $user=User::findOrFail($id);
         $data=$request->all();
         $status=$user->fill($data)->save();

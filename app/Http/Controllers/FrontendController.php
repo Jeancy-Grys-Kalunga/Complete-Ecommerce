@@ -21,6 +21,7 @@ use App\Models\Supermarket;
 use Illuminate\Support\Str;
 use App\Models\PostCategory;
 use Illuminate\Http\Request;
+use App\Models\SuperMarketCategory;
 
 class FrontendController extends Controller
 {
@@ -37,6 +38,9 @@ class FrontendController extends Controller
         // return $banner;
         $products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(8)->get();
         $category = Category::where('status', 'active')->where('is_parent', 1)->orderBy('title', 'ASC')->get();
+
+        // $menu = SuperMarketCategory::with('supermarkets')->get();
+        // dd($menu);
 
         // return $category;
         return view('frontend.index', [
@@ -253,6 +257,33 @@ class FrontendController extends Controller
     {
 
         $supermarket = Supermarket::where('slug', $request->slug)->firstOrFail();
+
+        $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+
+        $products = Product::where('supermarket_id', $supermarket->id)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        // return $request->slug;
+
+        if (request()->is('e-shop.loc/product-grids')) {
+            return view('frontend.pages.product-grids', [
+                'products' => $products,
+                'recent_products' => $recent_products
+            ]);
+        } else {
+            return view('frontend.pages.product-lists', [
+                'products' => $products,
+                'recent_products' => $recent_products
+            ]);
+        }
+    }
+
+    public function productCategory(Request $request)
+    {
+
+        $supermarket = Supermarket::with('supermarketCategory')->where('slug', $request->slug)->firstOrFail();
+         dd($supermarket);
 
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 

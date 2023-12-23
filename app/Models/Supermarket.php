@@ -41,4 +41,9 @@ class Supermarket extends Model
     {
         return Supermarket::with('fournisseur')->with('products')->where('id', $market)->get();
     }
+
+    public function supermarketCategory()
+    {
+        return $this->hasOne(SuperMarketCategory::class, 'id', 'supermarket_category_id');
+    }
 }

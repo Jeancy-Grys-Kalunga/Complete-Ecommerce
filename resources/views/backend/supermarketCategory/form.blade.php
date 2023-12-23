@@ -1,36 +1,29 @@
 @extends('backend.layouts.master')
-@section('title',$supplie->exists ? 'Edition fournisseur' : 'Ajout fournisseur')
+@section('title',$superMarketCategory->exists ? 'Edition Catégorie Supermarché' : 'Ajout de Nouvelle Catégorie')
 
 @section('main-content')
 
 <div class="card">
     <h5 class="card-header">@yield('title')</h5>
     <div class="card-body">
-        <form action="{{ route($supplie->exists ? 'supplie.update' : 'supplie.store', $supplie) }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route($superMarketCategory->exists ? 'superMarketCategory.update' : 'superMarketCategory.store', $superMarketCategory) }}" method="post"
+            enctype="multipart/form-data">
             @csrf
-            @method($supplie->exists ? 'put' : 'post')
+             @method($superMarketCategory->exists ? 'put' : 'post')
 
             @include('backend.layouts.partials.input', [
             'type' => 'text',
-            'name' => 'name',
-            'label' => 'Nom du fournisseur',
-            'value' => $supplie->name,
-            'placeholder' => 'Saisir le nom du fournisseur',
-            ])
-
-            @include('backend.layouts.partials.input', [
-            'type' => 'text',
-            'name' => 'email',
-            'label' => 'Adresse mail du fournisseur',
-            'value' => $supplie->email,
-            'placeholder' => 'Saisir le nom du fournisseur',
+            'name' => 'title',
+            'label' => 'Nom de la catégorie',
+            'value' => $superMarketCategory->title,
+            'placeholder' => 'Saisir le nom de la catégorie',
             ])
 
             @include('backend.layouts.partials.input', [
             'type' => 'file',
             'name' => 'photo',
-            'label' => 'Photo du fournisseur',
-            'value' => $supplie->photo,
+            'label' => 'Photo de la catégorie du supermarché',
+            'value' => $superMarketCategory->photo,
             ])
 
             <div class="form-group">
@@ -43,10 +36,11 @@
                 <span class="text-danger">{{$message}}</span>
                 @enderror
             </div>
+
             <div class="form-group mb-3">
                 <button type="reset" class="btn btn-warning">Annuler</button>
                 <button class="btn btn-success" type="submit">
-                    @if ($supplie->exists)
+                    @if ($superMarketCategory->exists)
                     Modifier
                     @else
                     Enregistrer

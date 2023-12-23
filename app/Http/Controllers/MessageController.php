@@ -47,7 +47,7 @@ class MessageController extends Controller
         $this->validate($request, [
             'name' => 'string|required|min:2',
             'email' => 'email|required',
-            'message' => 'required|min:20|max:200',
+            'message' => 'required|min:10|max:200',
             'subject' => 'string|required',
             'phone' => 'string|required'
         ]);
@@ -65,13 +65,14 @@ class MessageController extends Controller
         $data['subject'] = $message->subject;
         $data['photo'] = Auth()->user()->photo;
         // return $data;
-        event(new MessageSent($data));
+        $send = event(new MessageSent($data));
 
-        if ($message) {
+        if ($send) {
             request()->session();
-            Alert::toast('Votre message a été envoyé avec succès!', 'success');
+             (Alert::toast('Votre message a été envoyé avec succès!', 'success'));
             return redirect()->back();
         } else {
+            request()->session();
             Alert::toast('Quelques chose se mal passé lors de l\'envois de votre message veuillez réessayer plus tard ', 'success');
         }
     }
@@ -135,7 +136,7 @@ class MessageController extends Controller
         } else {
             Alert::toast('Quelques chose se mal passé lors de la suppresion du message veuillez réessayer plus tard ', 'success');
         }
-        
+
         return back();
     }
 }

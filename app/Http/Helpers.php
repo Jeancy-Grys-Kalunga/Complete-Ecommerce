@@ -9,6 +9,7 @@ use App\Models\Shipping;
 use App\Models\Wishlist;
 use App\Models\Supermarket;
 use App\Models\PostCategory;
+use App\Models\SuperMarketCategory;
 
 // use Auth;
 class Helper
@@ -68,9 +69,9 @@ class Helper
 
     public static function getHeaderShop()
     {
-        $shop = new Supermarket();
+        $shop = new SuperMarketCategory();
         // dd($category);
-        $menu = $shop->all();
+        $menu = $shop::with('supermarkets')->get();
 
         if ($menu) {
         ?>
@@ -82,17 +83,31 @@ class Helper
                     <tr>
                     <?php
                     foreach ($menu as $shop_info) {
-
+                        if ($shop_info->count() > 0) {
                     ?>
-                        <li><a href="<?php echo route('product-shop', $shop_info->slug); ?>"><?php echo $shop_info->title; ?></a></li>
-                <?php
-                    }    
-                }
-                ?>
-                      
+                            <li><a href="<?php echo route('shop', $shop_info->slug); ?>"><?php echo $shop_info->title; ?></a>
+                                <ul class="dropdown sub-dropdown border-0 shadow">
+                                    <?php
+                                    foreach ($shop_info->supermarkets as $sub_menu) {
+                                    ?>
+                                        <li><a href="<?php echo route('product-shop', [$sub_menu->slug]); ?>"><?php echo $sub_menu->title; ?></a></li>
+                                    <?php
+                                    }
+                                    ?>
+                                </ul>
+                            </li>
+                        <?php
+                        } else {
+                        ?>
+                            <li><a href="<?php echo route('product-cat-shop', $cat_info->slug); ?>"><?php echo $cat_info->title; ?></a></li>
+                    <?php
+                        }
+                    }
+                    ?>
                 </ul>
             </li>
-    <?php
+        <?php
+        }
     }
 
 
