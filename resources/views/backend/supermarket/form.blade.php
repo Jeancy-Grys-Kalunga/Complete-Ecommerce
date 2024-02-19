@@ -47,23 +47,6 @@
              @endforeach
           </select>
         </div>
-      
-        {{-- <div class="form-group">
-          <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
-          <div class="input-group">
-              <span class="input-group-btn">
-                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                  <i class="fa fa-picture-o"></i> Choisir
-                  </a>
-              </span>
-          <input id="thumbnail" class="form-control" type="text" name="thumbnail" value="{{old('thumbnail')}}">
-        </div>
-        <div id="holder" style="margin-top:15px;max-height:100px;"></div>
-          @error('thumbnail')
-          <span class="text-danger">{{$message}}</span>
-          @enderror
-        </div> --}}
-      
 
         @include('backend.layouts.partials.input', [
          'type' => 'file',
@@ -71,7 +54,6 @@
          'label' => 'Photo du supermarché',
          'value' => $supermarket->thumbail,
        ])
-
 
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
@@ -83,6 +65,19 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
+
+        <div class="form-group">
+            <label for="user_id">Catégorie de supermarché</label>
+            {{-- {{$brands}} --}}
+
+            <select name="user_id" class="form-control">
+                <option value="">Sélectionner catégorie</option>
+               @foreach($supermarketCategories->supermarketCategory as $Category)
+                <option value="{{$Category->id}}">{{$Category->title}}</option>
+               @endforeach
+            </select>
+          </div>
+
         <div class="form-group mb-3">
           <button type="reset" class="btn btn-warning">Annuler</button>
            <button class="btn btn-success" type="submit">

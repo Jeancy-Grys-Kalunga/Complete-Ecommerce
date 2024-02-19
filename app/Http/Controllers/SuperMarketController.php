@@ -19,6 +19,7 @@ class SuperMarketController extends Controller
 
         return view('backend.supermarket.index', [
             'supermarkets' => $supermarkets,
+
         ]);
     }
 
@@ -47,10 +48,12 @@ class SuperMarketController extends Controller
     public function create()
     {
         $fournisseurs = User::where('role', 1)->get();
+        $supermarketCategories = Supermarket::with('supermarketCategory')->get();
 
         return view('backend.supermarket.form', [
             'fournisseurs' => $fournisseurs,
-            'supermarket' => new Supermarket()
+            'supermarket' => new Supermarket(),
+            'supermarketCategories' => $supermarketCategories
         ]);
     }
 
@@ -97,10 +100,15 @@ class SuperMarketController extends Controller
     public function edit(Supermarket $supermarket)
     {
         $fournisseurs = User::where('role', 1)->get();
- 
+        $supermarketCategories = Supermarket::with('supermarketCategory')->get();
+        // dd($supermarketCategories);
+
+
         return view('backend.supermarket.form', [
             'fournisseurs' => $fournisseurs,
-            'supermarket' => $supermarket
+            'supermarket' => $supermarket,
+            'supermarketCategories' => $supermarketCategories
+
         ]);
     }
 

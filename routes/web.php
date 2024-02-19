@@ -73,7 +73,7 @@ Route::post('/product/search', [FrontendController::class, 'productSearch'])->na
 Route::get('/product-cat/{slug}', [FrontendController::class, 'productCat'])->name('product-cat');
 Route::get('/product-shop/{slug}', [FrontendController::class, 'productShop'])->name('product-shop');
 
-Route::get('/shop/{slug}', [FrontendController::class, 'productCategory'])->name('shop');
+Route::get('/shops/{slug}', [FrontendController::class, 'productCategory'])->name('shops');
 
 Route::get('/product-sub-cat/{slug}/{sub_slug}', [FrontendController::class, 'productSubCat'])->name('product-sub-cat');
 Route::get('/product-brand/{slug}', [FrontendController::class, 'productBrand'])->name('product-brand');
@@ -142,8 +142,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'user-role:admin']]
     Route::resource('users', 'UsersController');
     // Banner
     Route::resource('banner', 'BannerController');
-    // Brand
-    Route::resource('brand', 'BrandController');
+   
     // Profile
     Route::get('/profile', 'AdminController@profile')->name('admin.profile');
     Route::post('/profile/{id}', 'AdminController@profileUpdate')->name('profile-update');
@@ -190,7 +189,7 @@ Route::group(['prefix' => '/supplie', 'middleware' => ['auth', 'user-role:fourni
         return view('fournisseur.layouts.file-manager');
     })->name('file-manager');
     // user route
-    Route::resource('brand', 'BrandController');
+    // Route::resource('brand', 'BrandController');
     // Profile
     Route::get('/profile', 'AdminController@profile')->name('fournisseur.profile');
     Route::post('/profile/{id}', 'AdminController@profileUpdate')->name('profile-update');
@@ -252,4 +251,7 @@ Route::group(['middleware' => ['web', 'auth']], function () {
 
     // Shipping
     Route::resource('/shipping', 'ShippingController');
+
+     // Brand
+    Route::resource('brand', 'BrandController');
 });

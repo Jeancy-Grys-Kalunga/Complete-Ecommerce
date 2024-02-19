@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -35,10 +36,13 @@ class CategoryController extends Controller
     {
         if(Auth::user()->role == 'fournisseur') {
             $parent_cats=Category::where('is_parent',1)->orderBy('title','ASC')->get();
-        return view('fournisseur.category.create')->with('parent_cats',$parent_cats);
+        return view('fournisseur.category.form')->with('parent_cats',$parent_cats);
         } elseif (Auth::user()->role == 'admin') {
             $parent_cats=Category::where('is_parent',1)->orderBy('title','ASC')->get();
-            return view('backend.category.create')->with('parent_cats',$parent_cats);
+            return view('backend.category.form',[
+                'parent_cats'=> $parent_cats,
+                'category' => new Category ()
+            ]);
         }
 
     }
@@ -46,20 +50,11 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        // return $request->all();
-        $this->validate($request,[
-            'title'=>'string|required',
-            'summary'=>'string|nullable',
-            'photo'=>'string|nullable',
-            'status'=>'required|in:active,inactive',
-            'is_parent'=>'sometimes|in:1',
-            'parent_id'=>'nullable|exists:categories,id',
-        ]);
+
         $data= $request->all();
         $slug=Str::slug($request->title);
         $count=Category::where('slug',$slug)->count();
@@ -71,13 +66,11 @@ class CategoryController extends Controller
         // return $data;
         $status=Category::create($data);
         if($status){
-            request()->session()->flash('success','Catégorie enregistrée avec succès !');
+             return redirect()->route('category.index')->with('toast_success','Catégorie enregistrée avec succès !');
         }
         else{
-            request()->session()->flash('error','Oups quelques chose se mal passé lors de l\'enregistrement !');
+            return back()->with('toast_error','Oups quelques chose se mal passé lors de l\'enregistrement !');
         }
-        return redirect()->route('category.index');
-
 
     }
 
@@ -95,77 +88,64 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Category $category)
     {
         $parent_cats=Category::where('is_parent',1)->get();
-        $category=Category::findOrFail($id);
         if(Auth::user()->role == 'fournisseur') {
-            return view('fournisseur.category.edit')->with('category',$category)->with('parent_cats',$parent_cats);
+            return view('fournisseur.category.form')->with('category',$category)->with('parent_cats',$parent_cats);
 
         } elseif (Auth::user()->role == 'admin') {
-            return view('backend.category.edit')->with('category',$category)->with('parent_cats',$parent_cats);
+            return view('backend.category.form', [
+                'category'=> $category,
+                'parent_cats'=> $parent_cats
+            ]);
 
         }
-        }
+    }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * Update the specified resource in storage
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, Category $category)
     {
-        // return $request->all();
-        $category=Category::findOrFail($id);
-        $this->validate($request,[
-            'title'=>'string|required',
-            'summary'=>'string|nullable',
-            'photo'=>'string|nullable',
-            'status'=>'required|in:active,inactive',
-            'is_parent'=>'sometimes|in:1',
-            'parent_id'=>'nullable|exists:categories,id',
-        ]);
+
         $data= $request->all();
         $data['is_parent']=$request->input('is_parent',0);
         // return $data;
         $status=$category->fill($data)->save();
         if($status){
-            request()->session()->flash('success','Catégorie modifiée avec succès');
+            return redirect()->route('category.index')->with('toast_success','Catégorie modifiée avec succès');
         }
         else{
-            request()->session()->flash('error','Oups quelques chose se mal passé lors de la modification !');
+            return back()->with('toast_error','Oups quelques chose se mal passé lors de la modification !');
         }
-        return redirect()->route('category.index');
+
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category=Category::findOrFail($id);
-        $child_cat_id=Category::where('parent_id',$id)->pluck('id');
-        // return $child_cat_id;
+
+        $child_cat_id=Category::where('parent_id',$category)->pluck('id');
         $status=$category->delete();
 
         if($status){
             if(count($child_cat_id)>0){
                 Category::shiftChild($child_cat_id);
             }
-            request()->session()->flash('success','Catégorie supprimée avec succès');
+            return redirect()->route('category.index')->with('toast_success','Catégorie supprimée avec succès');
         }
         else{
-            request()->session()->flash('error','Oups quelques chose se mal passé lors de la suppréssion !');
+            return back()->with('toast_error','Oups quelques chose se mal passé lors de la suppréssion !');
         }
-        return redirect()->route('category.index');
+
     }
 
     public function getChildByParent(Request $request){

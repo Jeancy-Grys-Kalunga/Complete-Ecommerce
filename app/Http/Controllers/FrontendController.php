@@ -37,10 +37,8 @@ class FrontendController extends Controller
         $banners = Banner::where('status', 'active')->limit(3)->orderBy('id', 'DESC')->get();
         // return $banner;
         $products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(8)->get();
-        $category = Category::where('status', 'active')->where('is_parent', 1)->orderBy('title', 'ASC')->get();
+        $category = Category::where('status', 'active')->where('is_parent', 1)->orderBy('title', 'DESC')->get();
 
-        // $menu = SuperMarketCategory::with('supermarkets')->get();
-        // dd($menu);
 
         // return $category;
         return view('frontend.index', [
@@ -151,9 +149,6 @@ class FrontendController extends Controller
 
         if (!empty($_GET['price'])) {
             $price = explode('-', $_GET['price']);
-            // return $price;
-            // if(isset($price[0]) && is_numeric($price[0])) $price[0]=floor(Helper::base_amount($price[0]));
-            // if(isset($price[1]) && is_numeric($price[1])) $price[1]=ceil(Helper::base_amount($price[1]));
 
             $products->whereBetween('price', $price);
         }
@@ -282,12 +277,12 @@ class FrontendController extends Controller
     public function productCategory(Request $request)
     {
 
-        $supermarket = Supermarket::with('supermarketCategory')->where('slug', $request->slug)->firstOrFail();
-         dd($supermarket);
+        $category = SuperMarketCategory::where('slug', $request->slug)->firstOrFail();
+        $supermarkets = Supermarket::where('super_market_category_id', $category->id)->get();
 
-        $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+        $recent_products = Product::whereIn('supermarket_id', $supermarkets->pluck('id'))->get();
 
-        $products = Product::where('supermarket_id', $supermarket->id)
+        $products = Product::where('supermarket_id', $supermarkets->pluck('id'))
             ->orderBy('id', 'DESC')
             ->get();
 

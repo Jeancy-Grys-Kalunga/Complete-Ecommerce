@@ -21,6 +21,7 @@
 
 	<!-- Header -->
 	@include('frontend.layouts.header')
+    
     @include('sweetalert::alert')
 	<!--/ End Header -->
 	@yield('main-content')

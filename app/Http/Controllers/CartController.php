@@ -22,14 +22,14 @@ class CartController extends Controller
     {
         // dd($request->all());
         if (empty($request->slug)) {
-            request()->session()->flash('error', 'Produit non valide');
-            return back();
+            return redirect()->back()->with('error', 'Produit non valide');
+            
         }
         $product = Product::where('slug', $request->slug)->first();
         // return $product;
         if (empty($product)) {
-            request()->session()->flash('error', 'Produit non valide');
-            return back();
+            return redirect()->back()->with('error', 'Produit non valide');
+           
         }
 
         $already_cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->where('product_id', $product->id)->first();
@@ -52,13 +52,12 @@ class CartController extends Controller
             $cart->quantity = 1;
             $cart->amount = $cart->price * $cart->quantity;
             if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
-                return back()->with('error', 'Stock insuffisant !.');
+                return back()->with('error', 'Stock insuffisant !');
             }
             $cart->save();
             $wishlist = Wishlist::where('user_id', auth()->user()->id)->where('cart_id', null)->update(['cart_id' => $cart->id]);
         }
-        request()->session()->flash('success', 'Produit ajouté au panier avec succès ');
-        return back();
+        return redirect()->back()->with('success', 'Produit ajouté au panier avec succès ');
     }
 
     public function singleAddToCart(Request $request)
@@ -75,8 +74,7 @@ class CartController extends Controller
             return back()->with('error', 'Non disponible, Vous pouvez ajouter d\'autres produit.');
         }
         if (($request->quant[1] < 1) || empty($product)) {
-            request()->session()->flash('error', 'Produit non valide');
-            return back();
+            return redirect()->back()->with('error', 'Produit non valide');
         }
 
         $already_cart = Cart::where('user_id', auth()->user()->id)->where('order_id', null)->where('product_id', $product->id)->first();
@@ -107,8 +105,7 @@ class CartController extends Controller
             // return $cart;
             $cart->save();
         }
-        request()->session()->flash('success', 'Produit ajouté avec succès dans le panier.');
-        return back();
+        return redirect()->back()->with('success', 'Produit ajouté avec succès dans le panier.');
     }
 
     public function cartDelete(Request $request)
@@ -116,11 +113,9 @@ class CartController extends Controller
         $cart = Cart::find($request->id);
         if ($cart) {
             $cart->delete();
-            request()->session()->flash('success', 'Produit supprimé du panier avec succès !!');
-            return back();
+            return redirect()->back()->with('success', 'Produit supprimé du panier avec succès !!');
         }
-        request()->session()->flash('error', 'Désolé veuillez réessayer plus tard');
-        return back();
+        return redirect()->back()->with('error', 'Désolé veuillez réessayer plus tard');
     }
 
     public function cartUpdate(Request $request)
@@ -140,8 +135,7 @@ class CartController extends Controller
                     // return $quant;
 
                     if ($cart->product->stock < $quant) {
-                        request()->session()->flash('error', 'Non disponible');
-                        return back();
+                        return redirect()->back()->with('error', 'Produit Non disponible pour le moment');
                     }
                     $cart->quantity = ($cart->product->stock > $quant) ? $quant : $cart->product->stock;
                     // return $cart;
@@ -155,7 +149,7 @@ class CartController extends Controller
                     $cart->save();
                     $success = 'Votre panier est mis à jour avec succès ';
                 } else {
-                    $error[] = 'Pagné non valide !';
+                    $error[] = 'Panier non valide !';
                 }
             }
             return back()->with($error)->with('success', $success);

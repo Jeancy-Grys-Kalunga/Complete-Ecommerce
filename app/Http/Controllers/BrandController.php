@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Requests\BrandRequest;
 use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
@@ -16,7 +17,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brand=Brand::orderBy('id','DESC')->paginate();
+        $brand=Brand::orderBy('id','DESC')->paginate(10);
         if(Auth::user()->role=='fournisseur'){
             return view('fournisseur.brand.index')->with('brands',$brand);
         }elseif(Auth::user()->role=='admin'){
@@ -33,24 +34,24 @@ class BrandController extends Controller
     public function create()
     {
         if(Auth::user()->role=='fournisseur'){
-            return view('fournisseur.brand.create');
+            return view('fournisseur.brand.form', [
+                'brand' => new Brand ()
+            ]);
         }elseif(Auth::user()->role=='admin'){
-            return view('backend.brand.create');
+            return view('backend.brand.form', [
+                 'brand' => new Brand ()
+            ]);
         }
 
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BrandRequest $request)
     {
-        $this->validate($request,[
-            'title'=>'string|required',
-        ]);
+    
         $data=$request->all();
         $slug=Str::slug($request->title);
         $count=Brand::where('slug',$slug)->count();
@@ -61,16 +62,22 @@ class BrandController extends Controller
         // return $data;
         $status=Brand::create($data);
         if($status){
-            request()->session()->flash('success','Marque enregistrée avec succès');
+            if(Auth::user()->role=='fournisseur'){
+                return redirect()->route('brand.index')->with('toast_success','Marque enregistrée avec succès');
+
+            }elseif(Auth::user()->role=='admin'){
+                return redirect()->route('brand.index')->with('toast_success','Marque enregistrée avec succès');
+            }
         }
         else{
-            request()->session()->flash('error','Erreur veuillez réessayer plus tard');
+            if(Auth::user()->role=='fournisseur'){
+                return redirect()->back()->with('toast_error','Erreur veuillez réessayer plus tard');
+
+            }elseif(Auth::user()->role=='admin'){
+                return redirect()->back()->with('toast_error','Erreur veuillez réessayer plus tard');
+            }
         }
-        if(Auth::user()->role=='fournisseur'){
-            return redirect()->route('brand.index');
-        }elseif(Auth::user()->role=='admin'){
-            return redirect()->route('brand.index');
-        }
+       
 
     }
 
@@ -91,17 +98,21 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Brand $brand)
     {
-        $brand=Brand::find($id);
+       
         if(!$brand){
-            request()->session()->flash('error','Marque non trouvée ');
-        }
-
-        if(Auth::user()->role=='fournisseur'){
-            return view('fournisseur.brand.edit')->with('brand',$brand);
-        }elseif(Auth::user()->role=='admin'){
-            return view('backend.brand.edit')->with('brand',$brand);
+            if(Auth::user()->role=='fournisseur'){
+                return view('fournisseur.brand.form', [
+                    'brand' => $brand
+                ]);
+            }elseif(Auth::user()->role=='admin'){
+                return view('backend.brand.form', [
+                     'brand' => $brand
+                ]);
+            }
+        }else{
+            return redirect()->back()->with('error','Marque non trouvée ');
         }
 
     }
@@ -110,30 +121,33 @@ class BrandController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BrandRequest $request,Brand $brand)
     {
-        $brand=Brand::find($id);
-        $this->validate($request,[
-            'title'=>'string|required',
-        ]);
+      
         $data=$request->all();
 
         $status=$brand->fill($data)->save();
         if($status){
-            request()->session()->flash('success','Marque modfiée avec succès');
+            if(Auth::user()->role=='fournisseur'){
+                return redirect()->route('brand.index')->with('toast_success','Marque enregistrée avec succès');
+
+            }elseif(Auth::user()->role=='admin'){
+                return redirect()->route('brand.index')->with('toast_success','Marque enregistrée avec succès');
+            }
+           
         }
         else{
-            request()->session()->flash('error','Erreur veuillez réessayer plus tard');
+            if(Auth::user()->role=='fournisseur'){
+                return redirect()->back()->with('toast_error','Erreur lors de la modification veuillez réessayer plus tard');
+
+            }elseif(Auth::user()->role=='admin'){
+                return redirect()->back()->with('toast_error','Erreur survenue lors de la modification veuillez réessayer plus tard');
+            }
+            
         }
-        if(Auth::user()->role=='fournisseur'){
-            return redirect()->route('brand.index');
-        }elseif(Auth::user()->role=='admin'){
-            return redirect()->route('brand.index');
-        }
+       
     }
 
     /**
@@ -142,22 +156,22 @@ class BrandController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Brand $brand)
     {
-        $brand=Brand::find($id);
+      
         if($brand){
             $status=$brand->delete();
             if($status){
-                request()->session()->flash('success','Marque supprimée avec succès');
+                return redirect()->route('brand.index')->with('toast_success','Marque supprimée avec succès');
             }
             else{
-                request()->session()->flash('error','Erreur veuillez réessayer plus tard');
+                return redirect()->back()->with('toast_error','Erreur lors de la suppression veuillez réessayer plus tard');
             }
             return redirect()->route('brand.index');
         }
         else{
-            request()->session()->flash('error','Aucune marque trouvée');
-            return redirect()->back();
+            return redirect()->back()->with('error','Aucune marque trouvée');
+            
         }
     }
 }

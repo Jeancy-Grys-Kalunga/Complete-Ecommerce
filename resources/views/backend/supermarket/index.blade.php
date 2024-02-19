@@ -16,7 +16,7 @@
     <div class="card-body">
       <div class="table-responsive">
         @if(count($supermarkets)>0)
-        <table class="table table-bordered" id="product-dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
               <th>N°</th>
@@ -32,11 +32,7 @@
           <tbody>
 
             @foreach($supermarkets as $supermarket)
-              {{-- @php
-              $sub_cat_info=DB::table('categories')->select('title')->where('id',$product->child_cat_id)->get();
-              // dd($sub_cat_info);
-              $brands=DB::table('brands')->select('title')->where('id',$product->brand_id)->get();
-              @endphp --}}
+              
                 <tr>
                     <td>{{$supermarket->id}}</td>
                     <td>{{$supermarket->title}}</td>
@@ -94,7 +90,7 @@
       }
 
       .zoom:hover {
-        transform: scale(5);
+        transform: scale(3.2);
       }
   </style>
 @endpush
@@ -109,13 +105,12 @@
   <!-- Page level custom scripts -->
   <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
   <script>
-
-      $('#product-dataTable').DataTable( {
-        "scrollX": false
+      
+      $('#banner-dataTable').DataTable( {
             "columnDefs":[
                 {
                     "orderable":false,
-                    "targets":[10,11,12]
+                    "targets":[3,4]
                 }
             ]
         } );
@@ -123,7 +118,7 @@
         // Sweet alert
 
         function deleteData(id){
-
+            
         }
   </script>
   <script>
@@ -139,7 +134,7 @@
               // alert(dataID);
               e.preventDefault();
               swal({
-                    title: "Etès-vous sûr ?",
+                    title: "Etês-vous sûr ?",
                     text: "Voulez-vous vraiment supprimer ce supermarché !",
                     icon: "warning",
                     buttons: true,

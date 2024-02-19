@@ -8,7 +8,7 @@ use Malhal\Geographical\Geographical;
 
 class Supermarket extends Model
 {
-   
+
     use HasFactory;
     use Geographical;
 
@@ -44,6 +44,6 @@ class Supermarket extends Model
 
     public function supermarketCategory()
     {
-        return $this->hasOne(SuperMarketCategory::class, 'id', 'supermarket_category_id');
+        return $this->hasOne(SuperMarketCategory::class, 'id', 'super_market_category_id');
     }
 }

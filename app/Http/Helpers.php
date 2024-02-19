@@ -36,7 +36,7 @@ class Helper
 ?>
 
             <li>
-                <a href="javascript:void(0);">Catégories<i class="ti-angle-down"></i></a>
+                <a href="javascript:void(0);">Meilleures Catégories<i class="ti-angle-down"></i></a>
                 <ul class="dropdown border-0 shadow">
                     <?php
                     foreach ($menu as $cat_info) {
@@ -76,7 +76,7 @@ class Helper
         if ($menu) {
         ?>
             <li>
-                <a href="javascript:void(0);">Supermarchés<i class="ti-angle-down"></i></a>
+                <a href="javascript:void(0);">Tendances<i class="ti-angle-down"></i></a>
                 <ul class="dropdown border-0 shadow">
 
                 <li><a href="<?php echo route('markets'); ?>"><i class="ti-location-pin"></i>Le plus proche de vous </a></li>
@@ -85,12 +85,12 @@ class Helper
                     foreach ($menu as $shop_info) {
                         if ($shop_info->count() > 0) {
                     ?>
-                            <li><a href="<?php echo route('shop', $shop_info->slug); ?>"><?php echo $shop_info->title; ?></a>
+                             <li><a href="<?php echo route('shops', $shop_info->slug); ?>"><?php echo $shop_info->title; ?></a>
                                 <ul class="dropdown sub-dropdown border-0 shadow">
                                     <?php
-                                    foreach ($shop_info->supermarkets as $sub_menu) {
+                                    foreach ($shop_info->supermarkets as $supermarket_menu) {
                                     ?>
-                                        <li><a href="<?php echo route('product-shop', [$sub_menu->slug]); ?>"><?php echo $sub_menu->title; ?></a></li>
+                                        <li><a href="<?php echo route('product-shop', [$supermarket_menu->slug]); ?>"><?php echo $supermarket_menu->title; ?></a></li>
                                     <?php
                                     }
                                     ?>
@@ -99,7 +99,7 @@ class Helper
                         <?php
                         } else {
                         ?>
-                            <li><a href="<?php echo route('product-cat-shop', $cat_info->slug); ?>"><?php echo $cat_info->title; ?></a></li>
+                            <li><a href="<?php echo route('shops', $shop_info->slug); ?>"><?php echo $shop_info->title; ?></a></li>
                     <?php
                         }
                     }

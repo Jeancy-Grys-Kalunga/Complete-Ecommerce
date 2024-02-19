@@ -17,7 +17,7 @@
 							@php
 								$settings=DB::table('settings')->get();
 							@endphp
-							<h3>Bienvenue sur  <span>E-shop</span></h3>
+							<h3>Bienvenue sur  <span>MNG Delevery</span></h3>
 							<p>@foreach($settings as $data) {{$data->description}} @endforeach</p>
 							<div class="button">
 								<a href="{{route('blog')}}" class="btn">Blog</a>

@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+@section('title','Catégories')
 
 @section('main-content')
  <!-- DataTales Example -->

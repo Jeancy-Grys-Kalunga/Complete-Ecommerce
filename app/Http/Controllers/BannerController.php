@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Banner;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Requests\BannerRequest;
+
 class BannerController extends Controller
 {
     /**
@@ -14,7 +16,7 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $banner=Banner::orderBy('id','DESC')->paginate(10);
+        $banner=Banner::orderBy('id','DESC')->paginate();
         return view('backend.banner.index')->with('banners',$banner);
     }
 
@@ -25,7 +27,7 @@ class BannerController extends Controller
      */
     public function create()
     {
-        return view('backend.banner.create');
+        return view('backend.banner.form', [ 'banner' =>  new Banner ()]);
     }
 
     /**
@@ -34,15 +36,8 @@ class BannerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BannerRequest $request)
     {
-        // return $request->all();
-        $this->validate($request,[
-            'title'=>'string|required|max:50',
-            'description'=>'string|nullable',
-            'photo'=>'string|required',
-            'status'=>'required|in:active,inactive',
-        ]);
         $data=$request->all();
         $slug=Str::slug($request->title);
         $count=Banner::where('slug',$slug)->count();
@@ -53,12 +48,11 @@ class BannerController extends Controller
         // return $slug;
         $status=Banner::create($data);
         if($status){
-            request()->session()->flash('success','Bannière enregistré avec succès');
+            return redirect()->route('banner.index')->with('toast_success','Bannière enregistré avec succès');
         }
         else{
-            request()->session()->flash('error','Erreur survenue lors de l\'enregistrement');
+            return redirect()->back()->with('toast_error','Erreur survenue lors l\'eregistrement ');
         }
-        return redirect()->route('banner.index');
     }
 
     /**
@@ -75,65 +69,46 @@ class BannerController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Banner $banner)
     {
-        $banner=Banner::findOrFail($id);
-        return view('backend.banner.edit')->with('banner',$banner);
+        return view('backend.banner.form', [ 'banner' =>$banner ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BannerRequest $request, Banner $banner)
     {
-        $banner=Banner::findOrFail($id);
-        $this->validate($request,[
-            'title'=>'string|required|max:50',
-            'description'=>'string|nullable',
-            'photo'=>'string|required',
-            'status'=>'required|in:active,inactive',
-        ]);
         $data=$request->all();
-        // $slug=Str::slug($request->title);
-        // $count=Banner::where('slug',$slug)->count();
-        // if($count>0){
-        //     $slug=$slug.'-'.date('ymdis').'-'.rand(0,999);
-        // }
-        // $data['slug']=$slug;
-        // return $slug;
+
         $status=$banner->fill($data)->save();
         if($status){
-            request()->session()->flash('success','Bannière mofifiée avec succès');
+            return redirect()->route('banner.index')->with('toast_success','Bannière mofifiée avec succès');
         }
         else{
-            request()->session()->flash('error','Erreur survenue lors de la modification');
+            return redirect()->back()->with('error','Erreur survenue lors de la modification');
         }
-        return redirect()->route('banner.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Banner $banner)
     {
-        $banner=Banner::findOrFail($id);
+
         $status=$banner->delete();
         if($status){
-            request()->session()->flash('success','Bannière supprimé avec succès');
+            return redirect()->route('banner.index')->with('toast_success','Bannière supprimé avec succès');
         }
         else{
-            request()->session()->flash('error','Erreur survenue lors de la suppression');
+            return redirect()->back()->with('toast_error','Erreur survenue lors de la suppression');
         }
-        return redirect()->route('banner.index');
+
     }
 }

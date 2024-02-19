@@ -51,7 +51,7 @@
                                 <!--/ End Single Widget -->
                                 <!-- Shop By Price -->
 								<div class="single-widget range">
-									<h3 class="title">Filtrer par prix</h3>
+									<h3 class="title">Filtrer par Prix</h3>
 									<div class="price-filter">
 										<div class="price-filter-inner">
 											{{-- <div id="slider-range" data-min="10" data-max="2000" data-currency="%"></div>
@@ -216,7 +216,7 @@
 									@endforeach
 								@else
 
-									<h4 class="text-warning" style="margin:100px auto;">Nous n'avons pas encore des produits disponibles pour cette catégorie ou pour le Super-Marché choisi pour le moment</h4>
+									<h4 class="text-warning" style="margin:100px auto;">Nous n'avons pas encore des produits disponibles pour cette catégorie ou pour la tendance choisie pour le moment</h4>
 								@endif
 							</div>
 

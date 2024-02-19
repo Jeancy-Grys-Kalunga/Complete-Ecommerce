@@ -67,7 +67,7 @@
                           {{$product->sub_cat_info->title ?? ''}}
                       </sub>
                     </td>
-                    <td>{{(($product->is_featured==1)? 'Yes': 'No')}}</td>
+                    <td> {{(($product->is_featured==1)? 'Yes': 'No')}}</td>
                     <td> {{$product->price}} FC </td>
                     <td>  {{$product->discount}} % </td>
                     <td>  {{$product->size }}</td>
@@ -137,7 +137,7 @@
       }
 
       .zoom:hover {
-        transform: scale(5);
+        transform: scale(3.2);
       }
   </style>
 @endpush
@@ -152,13 +152,12 @@
   <!-- Page level custom scripts -->
   <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
   <script>
-
-      $('#product-dataTable').DataTable( {
-        "scrollX": false
+      
+      $('#banner-dataTable').DataTable( {
             "columnDefs":[
                 {
                     "orderable":false,
-                    "targets":[10,11,12]
+                    "targets":[3,4]
                 }
             ]
         } );
@@ -166,7 +165,7 @@
         // Sweet alert
 
         function deleteData(id){
-
+            
         }
   </script>
   <script>
