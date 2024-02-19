@@ -1,13 +1,13 @@
 ## Are you looking for a production-ready ecommerce & HRMS app?
 
-If you're looking for a production-ready ecommerce & HRMS app, check out [KetraMart](https://ketramart.com/) & [Ketra HRMS](https://hrms.ketramart.com/).
+If you're looking for a production-ready ecommerce & HRMS app.
 
 
 ## Complete E-commerce website in  Laravel 10
 
 
 ### Features :
-- ##### PWA (progressive web app)
+- ##### PWA (Progressive Web App)
 # ====== FRONT-END =======
 
 - Responsive Layout
@@ -52,7 +52,6 @@ Many more....
 
 
 ## ======= USER DASHBOARD =======
-
 
 - Order management
 - Review Management
